@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Marketing Content Studio — MBA Edition</title>
+<meta name="description" content="AI-powered marketing content studio for MBA students." />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c27;
+    --border: rgba(255,255,255,0.08); --border-hover: rgba(255,255,255,0.16);
+    --accent: #4f7fff; --accent2: #7c5cfc; --text: #f0f0f8;
+    --text-muted: #7a7a9a; --text-dim: #4a4a6a; --success: #2ecc71;
+    --radius: 12px; --radius-sm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; line-height: 1.6; min-height: 100vh; }
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 24px 16px 80px; }
+  .header { display: flex; align-items: center; gap: 14px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 24px; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(79,127,255,0.15), transparent 70%); pointer-events: none; }
+  .logo { width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; color: #fff; flex-shrink: 0; }
+  .header-info { flex: 1; }
+  .header-title { font-size: 20px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; font-family: 'Syne', sans-serif; }
+  .header-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .header-badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(79,127,255,0.15); color: var(--accent); border: 1px solid rgba(79,127,255,0.3); font-weight: 500; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab { padding: 8px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); font-size: 13px; cursor: pointer; color: var(--text-muted); font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .tab:hover { border-color: var(--border-hover); color: var(--text); }
+  .tab.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; font-weight: 500; }
+  .panel { display: none; } .panel.active { display: block; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 16px; }
+  .field { margin-bottom: 14px; }
+  .field-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { width: 100%; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  select { cursor: pointer; } textarea { resize: vertical; min-height: 80px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  @media (max-width: 500px) { .row { grid-template-columns: 1fr; } }
+  .badge-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted); cursor: pointer; transition: all 0.2s; }
+  .badge:hover { border-color: var(--border-hover); color: var(--text); }
+  .badge.sel { background: rgba(79,127,255,0.15); color: var(--accent); border-color: rgba(79,127,255,0.4); }
+  .flex-end { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+  .btn { padding: 10px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+  .btn:hover { color: var(--text); border-color: var(--border-hover); }
+  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; border-color: transparent; font-weight: 500; }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-copy { font-size: 12px; padding: 7px 14px; }
+  .output-box { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-top: 14px; font-size: 13px; color: var(--text); line-height: 1.8; white-space: pre-wrap; display: none; }
+  .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .output-label { font-size: 11px; color: var(--accent); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .output-text { line-height: 1.8; }
+  .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .tip-card { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 12px 16px; margin-bottom: 10px; }
+  .tip-title { font-weight: 600; font-size: 13px; color: var(--accent); margin-bottom: 4px; font-family: 'Syne', sans-serif; }
+  .tip-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .scores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .score-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+  .score-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .score-value { font-size: 22px; font-weight: 700; font-family: 'Syne', sans-serif; color: var(--text); }
+  .score-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; margin-top: 8px; }
+  .score-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.6s ease; }
+  .footer { text-align: center; padding: 24px; color: var(--text-dim); font-size: 12px; margin-top: 40px; }
+  .footer span { color: var(--accent); }
+  #toast { position: fixed; bottom: 30px; right: 30px; background: var(--success); color: #fff; padding: 10px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="logo">MC</div>
+    <div class="header-info">
+      <div class="header-title">Marketing Content Studio</div>
+      <div class="header-sub">Content Creation for MBA Students</div>
+    </div>
+    <div class="header-badge">AI Powered</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('social')">Social Media</div>
+    <div class="tab" onclick="switchTab('blog')">Blog</div>
+    <div class="tab" onclick="switchTab('ad')">Ad Copy</div>
+    <div class="tab" onclick="switchTab('email')">Email</div>
+    <div class="tab" onclick="switchTab('tips')">Copywriting Tips</div>
+    <div class="tab" onclick="switchTab('analyzer')">Copy Analyzer</div>
+  </div>
+
+  <div class="panel active" id="panel-social">
+    <div class="card">
+      <div class="section-title">Social Media Post Generator</div>
+      <div class="row">
+        <div><div class="field-label">Platform</div>
+          <select id="sm-platform"><option>Instagram</option><option>LinkedIn</option><option>Twitter/X</option><option>Facebook</option></select></div>
+        <div><div class="field-label">Tone</div>
+          <select id="sm-tone"><option>Professional</option><option>Casual</option><option>Inspiring</option><option>Humorous</option></select></div>
+      </div>
+      <div class="field"><div class="field-label">Product / Topic</div>
+        <input type="text" id="sm-topic" placeholder="e.g. New product launch, brand awareness..." /></div>
+      <div class="field"><div class="field-label">Target Audience</div>
+        <input type="text" id="sm-audience" placeholder="e.g. Young professionals, students..." /></div>
+      <div class="field"><div class="field-label">Include Elements</div>
+        <div class="badge-group" id="sm-elements">
+          <span class="badge sel" onclick="toggleBadge(this)">Hashtags</span>
+          <span class="badge" onclick="toggleBadge(this)">Emoji</span>
+          <span class="badge sel" onclick="toggleBadge(this)">CTA</span>
+          <span class="badge" onclick="toggleBadge(this)">Statistics</span>
+          <span class="badge" onclick="toggleBadge(this)">Question</span>
+        </div>
+      </div>
+      <div class="flex-end"><button class="btn btn-primary" onclick="generateContent('social')">Generate Post →</button></div>
+      <div id="sm-output" class="output-box">
+        <div class="output-header"><span class="output-label">Generated Post</span><button class="btn btn-copy" onclick="copyOutput('sm-output-text')">Copy</button></div>
+        <div class="output-text" id="sm-output-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-blog">
+    <div class="card">
+      <div class="section-title">Blog Article Builder</div>
+      <div class="field"><div class="field-label">Blog Topic</div>
+        <input type="text" id="blog-topic" placeholder="e.g. 5 ways digital marketing is changing..." /></div>
+      <div class="row">
+        <div><div class="field-label">Target Reader</div><input type="text" id="blog-reader" placeholder="e.g. MBA students..." /></div>
+        <div><div class="field-label">Article Length</div>
+          <select id="blog-length"><option>Short (300 words)</option><option>Medium (600 words)</option><option>Long (1000+ words)</option></select></div>
+      </div>
+      <div class="field"><div class="field-label">Key Points to Cover</div>
+        <textarea id="blog-points" placeholder="e.g. Market trends, case studies, actionable tips..."></textarea></div>
+      <div class="flex-end"><button class="btn btn-primary" onclick="generateContent('blog')">Generate Outline →</button></div>
+      <div id="blog-output" class="output-box">
+        <div class="output-header"><span class="output-label">Blog Outline</span><button class="btn btn-copy" onclick="copyOutput('blog-output-text')">Copy</button></div>
+        <div class="output-text" id="blog-output-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-ad">
+    <div class="card">
+      <div class="section-title">Ad Copy Generator</div>
+      <div class="row">
+        <div><div class="field-label">Ad Type</div>
+          <select id="ad-type"><option>Google Search Ad</option><option>Facebook Ad</option><option>Instagram Ad</option><option>Banner Ad</option></select></div>
+        <div><div class="field-label">Framework</div>
+          <select id="ad-framework"><option>AIDA</option><option>PAS</option><option>BAB</option><option>4Cs</option></select></div>
+      </div>
+      <div class="field"><div class="field-label">Product / Service</div><input type="text" id="ad-product" placeholder="e.g. Online MBA course..." /></div>
+      <div class="field"><div class="field-label">Unique Selling Point (USP)</div><input type="text" id="ad-usp" placeholder="e.g. 50% cheaper, guaranteed results..." /></div>
+      <div class="field"><div class="field-label">Call to Action</div><input type="text" id="ad-cta" placeholder="e.g. Sign up free, Book a demo..." /></div>
+      <div class="flex-end"><button class="btn btn-primary" onclick="generateContent('ad')">Generate Ad →</button></div>
+      <div id="ad-output" class="output-box">
+        <div class="output-header"><span class="output-label">Generated Ad Copy</span><button class="btn btn-copy" onclick="copyOutput('ad-output-text')">Copy</button></div>
+        <div class="output-text" id="ad-output-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-email">
+    <div class="card">
+      <div class="section-title">Email Campaign Writer</div>
+      <div class="row">
+        <div><div class="field-label">Email Type</div>
+          <select id="email-type"><option>Welcome Email</option><option>Promotional</option><option>Newsletter</option><option>Cold Outreach</option><option>Follow-up</option></select></div>
+        <div><div class="field-label">Tone</div>
+          <select id="email-tone"><option>Professional</option><option>Friendly</option><option>Urgent</option><option>Personal</option></select></div>
+      </div>
+      <div class="field"><div class="field-label">Subject / Topic</div><input type="text" id="email-subject" placeholder="e.g. Exclusive offer for our VIP members..." /></div>
+      <div class="field"><div class="field-label">Key Message</div><textarea id="email-msg" placeholder="What do you want the reader to know or do?"></textarea></div>
+      <div class="flex-end"><button class="btn btn-primary" onclick="generateContent('email')">Generate Email →</button></div>
+      <div id="email-output" class="output-box">
+        <div class="output-header"><span class="output-label">Generated Email</span><button class="btn btn-copy" onclick="copyOutput('email-output-text')">Copy</button></div>
+        <div class="output-text" id="email-output-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-tips">
+    <div class="card">
+      <div class="section-title">Copywriting Frameworks</div>
+      <div class="tip-card"><div class="tip-title">AIDA — Attention, Interest, Desire, Action</div><div class="tip-body">Hook with a bold statement, build interest with benefits, create desire with proof, close with a strong CTA. Best for ads and landing pages.</div></div>
+      <div class="tip-card"><div class="tip-title">PAS — Problem, Agitate, Solution</div><div class="tip-body">Identify the pain point, make it feel urgent, then present your product as the only logical solution. Highly effective in email marketing.</div></div>
+      <div class="tip-card"><div class="tip-title">BAB — Before, After, Bridge</div><div class="tip-body">Paint the "before" state (struggle), show the "after" (success), then bridge the gap with your offer. Great for testimonials and case studies.</div></div>
+      <div class="tip-card"><div class="tip-title">The Power of One</div><div class="tip-body">One big idea, one key emotion, one specific reader, one clear CTA. Focused copy always outperforms scattered messaging.</div></div>
+      <div class="tip-card"><div class="tip-title">Social Proof Triggers</div><div class="tip-body">Numbers, reviews, and endorsements boost credibility. Always quantify: "10,000+ customers" beats "many customers" every time.</div></div>
+      <div class="tip-card"><div class="tip-title">Headline Formulas That Work</div><div class="tip-body">"How to [benefit] without [pain]" — "The secret to [desire]" — "[Number] ways to [goal]" — "Why [common belief] is wrong"</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-analyzer">
+    <div class="card">
+      <div class="section-title">Copy Analyzer</div>
+      <div class="field"><div class="field-label">Paste Your Copy Below</div>
+        <textarea id="analyze-input" style="min-height:110px" placeholder="Paste any marketing copy to get instant AI feedback..."></textarea></div>
+      <div class="flex-end"><button class="btn btn-primary" onclick="analyzeCopy()">Analyze Copy →</button></div>
+      <div id="analyze-output" style="display:none; margin-top:16px">
+        <div class="scores-grid">
+          <div class="score-card"><div class="score-label">Clarity</div><div class="score-value" id="score-clarity">–</div><div class="score-bar"><div class="score-fill" id="bar-clarity" style="width:0%"></div></div></div>
+          <div class="score-card"><div class="score-label">Persuasion</div><div class="score-value" id="score-persuasion">–</div><div class="score-bar"><div class="score-fill" id="bar-persuasion" style="width:0%"></div></div></div>
+          <div class="score-card"><div class="score-label">CTA Strength</div><div class="score-value" id="score-cta">–</div><div class="score-bar"><div class="score-fill" id="bar-cta" style="width:0%"></div></div></div>
+          <div class="score-card"><div class="score-label">Overall Score</div><div class="score-value" id="score-overall">–</div><div class="score-bar"><div class="score-fill" id="bar-overall" style="width:0%"></div></div></div>
+        </div>
+        <div class="output-box" style="display:block; margin-top:0">
+          <div class="output-header"><span class="output-label">AI Feedback</span></div>
+          <div class="output-text" id="analyze-feedback"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Built by Marudhupandi devaraj · Powered by <span>Google Gemini AI</span> · Marketing Content Studio</div>
+</div>
+<div id="toast">Copied to clipboard!</div>
+<script>
+const API_URL = window.location.origin + '/generate';
+
+function switchTab(id) {
+  const tabs = ['social','blog','ad','email','tips','analyzer'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === id));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+}
+function toggleBadge(el) { el.classList.toggle('sel'); }
+function getSelectedBadges(containerId) {
+  return Array.from(document.querySelectorAll('#' + containerId + ' .badge.sel')).map(b => b.textContent).join(', ');
+}
+async function callAPI(prompt) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Something went wrong');
+  return data.result;
+}
+function setLoading(textId, outputId) {
+  document.getElementById(outputId).style.display = 'block';
+  document.getElementById(textId).innerHTML = '<span class="loading-spinner"></span> Generating...';
+}
+async function generateContent(type) {
+  let prompt = '', textId = '', outputId = '';
+  if (type === 'social') {
+    const platform = document.getElementById('sm-platform').value;
+    const tone = document.getElementById('sm-tone').value;
+    const topic = document.getElementById('sm-topic').value || 'brand awareness';
+    const audience = document.getElementById('sm-audience').value || 'general audience';
+    const elements = getSelectedBadges('sm-elements');
+    outputId = 'sm-output'; textId = 'sm-output-text';
+    prompt = `Write a ${tone.toLowerCase()} ${platform} post about: ${topic}. Target audience: ${audience}. Include: ${elements || 'a CTA'}. Make it engaging and platform-appropriate.`;
+  } else if (type === 'blog') {
+    const topic = document.getElementById('blog-topic').value || 'digital marketing trends';
+    const reader = document.getElementById('blog-reader').value || 'marketing professionals';
+    const length = document.getElementById('blog-length').value;
+    const points = document.getElementById('blog-points').value || 'key trends and tips';
+    outputId = 'blog-output'; textId = 'blog-output-text';
+    prompt = `Create a blog outline for: "${topic}". Reader: ${reader}. Length: ${length}. Points: ${points}. Include headline, intro, 4-5 sections, conclusion.`;
+  } else if (type === 'ad') {
+    const adType = document.getElementById('ad-type').value;
+    const framework = document.getElementById('ad-framework').value;
+    const product = document.getElementById('ad-product').value || 'product';
+    const usp = document.getElementById('ad-usp').value || 'best quality';
+    const cta = document.getElementById('ad-cta').value || 'Learn more';
+    outputId = 'ad-output'; textId = 'ad-output-text';
+    prompt = `Write a ${adType} using ${framework} framework for: ${product}. USP: ${usp}. CTA: ${cta}. Make it persuasive.`;
+  } else if (type === 'email') {
+    const emailType = document.getElementById('email-type').value;
+    const tone = document.getElementById('email-tone').value;
+    const subject = document.getElementById('email-subject').value || 'exclusive offer';
+    const msg = document.getElementById('email-msg').value || 'promote our service';
+    outputId = 'email-output'; textId = 'email-output-text';
+    prompt = `Write a ${emailType} email with ${tone.toLowerCase()} tone. Subject: ${subject}. Message: ${msg}. Include subject line, body, and CTA.`;
+  }
+  setLoading(textId, outputId);
+  try {
+    const result = await callAPI(prompt);
+    document.getElementById(textId).textContent = result;
+  } catch (e) {
+    document.getElementById(textId).textContent = e.message;
+  }
+}
+async function analyzeCopy() {
+  const text = document.getElementById('analyze-input').value;
+  if (!text.trim()) { alert('Please paste some copy first.'); return; }
+  document.getElementById('analyze-output').style.display = 'block';
+  document.getElementById('analyze-feedback').innerHTML = '<span class="loading-spinner"></span> Analyzing...';
+  const prompt = `Analyze this marketing copy:\n\n"${text}"\n\nRespond ONLY with valid JSON, no markdown:\n{"clarity":85,"persuasion":72,"cta":60,"overall":72,"feedback":"3-4 sentence feedback with strengths and improvements"}`;
+  try {
+    const result = await callAPI(prompt);
+    const clean = result.replace(/```json|```/g, '').trim();
+    const d = JSON.parse(clean);
+    document.getElementById('score-clarity').textContent = d.clarity + '/100';
+    document.getElementById('score-persuasion').textContent = d.persuasion + '/100';
+    document.getElementById('score-cta').textContent = d.cta + '/100';
+    document.getElementById('score-overall').textContent = d.overall + '/100';
+    document.getElementById('bar-clarity').style.width = d.clarity + '%';
+    document.getElementById('bar-persuasion').style.width = d.persuasion + '%';
+    document.getElementById('bar-cta').style.width = d.cta + '%';
+    document.getElementById('bar-overall').style.width = d.overall + '%';
+    document.getElementById('analyze-feedback').textContent = d.feedback;
+  } catch (e) {
+    document.getElementById('analyze-feedback').textContent = e.message || 'Could not analyze. Please try agn.';
+  }
+}
+function copyOutput(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  });
+}
+</script>
+</body>
+</html>

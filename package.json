@@ -1,7 +1,7 @@
 {
   "name": "marketing-content-studio",
   "version": "1.0.0",
-  "description": "AI Marketing Content Studio for MBA Students",
+  "description": "AI Marketing Content Studio",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
